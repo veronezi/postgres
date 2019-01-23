@@ -1,28 +1,10 @@
 version: '3.7'
 
 services:
-  static:
-    image: veronezi/todo-static
-
-  auth:
-    image: veronezi/auth-jwt:${STABLE_VERSION_JWT}
-
-  ui:
-    image: veronezi/todo-facade
-    ports:
-    - "80"
-    environment:
-    - WAIT_FOR=api:8080,static:80
-
-  api:
-    image: veronezi/todo-api
-    ports:
-    - "8080"
-    environment:
-    - WAIT_FOR=db:5432,auth:3000
-
   db:
-    image: veronezi/sample-postgres:${POSTGRES_VERSION}
+    image: veronezi/sample-postgres
+    ports:
+    - "5432"
     environment:
     - DEBUG=false
     - POSTGRES_DB=todo

@@ -13,6 +13,7 @@
     <properties>
         <openjdk.version>8-jre</openjdk.version>
         <dockerize_version>0.6.1</dockerize_version>
+        <postgres.driver.version>42.2.4</postgres.driver.version>
         <VERSION>${project.version}</VERSION>
         <OPENJKD_VERSION>${openjdk.version}</OPENJKD_VERSION>
         <POSTGRES_VERSION>9.5.15</POSTGRES_VERSION>
@@ -41,6 +42,11 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgres.driver.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
