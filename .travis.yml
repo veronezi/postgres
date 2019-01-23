@@ -1,0 +1,32 @@
+dist: trusty
+language: java
+install: true
+
+services:
+- docker
+
+sudo: required
+
+cache:
+  directories:
+  - $HOME/.m2
+
+env:
+  global:
+  - MY_VERSION=0.0.1
+
+before_install:
+- bash .travis.prepare.sh
+
+script:
+- bash .travis.build.sh
+
+deploy:
+  provider: script
+  script: bash .travis.deploy.sh
+  skip_cleanup: true
+  on:
+    all_branches: true
+
+after_script:
+- bash .travis.cleanup.sh
