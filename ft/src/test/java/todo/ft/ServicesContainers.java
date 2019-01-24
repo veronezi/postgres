@@ -1,8 +1,10 @@
 package todo.ft;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.commons.io.FileUtils;
 import org.testcontainers.containers.DockerComposeContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.io.File;
@@ -14,21 +16,24 @@ public class ServicesContainers implements ServicesProvider {
 
     private static final Duration TIMEOUT = Duration.ofSeconds(120);
 
-    private final DockerComposeContainer stack;
+    private DockerComposeContainer stack;
+    private static final File DC_FILE;
+    private static final File DC_FILE_RECOVERY;
 
-    public ServicesContainers() {
-        if (Boolean.getBoolean("external_services")) {
-            this.stack = null;
-            return;
-        }
-        final File dcFile;
+    static {
         try {
-            dcFile = File.createTempFile("docker-compose", ".yaml");
-            FileUtils.copyInputStreamToFile(ServicesContainers.class.getResourceAsStream("/dc-tests.yaml"), dcFile);
+            DC_FILE = File.createTempFile("docker-compose_db_", ".yaml");
+            FileUtils.copyInputStreamToFile(ServicesContainers.class.getResourceAsStream("/dc-tests.yaml"), DC_FILE);
+
+            DC_FILE_RECOVERY = File.createTempFile("docker-compose_db_recovery_", ".yaml");
+            FileUtils.copyInputStreamToFile(ServicesContainers.class.getResourceAsStream("/dc-tests-recovery.yaml"), DC_FILE_RECOVERY);
         } catch (IOException e) {
             throw new TestException(e);
         }
-        this.stack = new DockerComposeContainer(dcFile)
+    }
+
+    private DockerComposeContainer createStack(boolean recovery) {
+        val result = new DockerComposeContainer(recovery? DC_FILE_RECOVERY : DC_FILE)
                 .withPull(false)
                 .withExposedService(
                         "db_1",
@@ -36,9 +41,12 @@ public class ServicesContainers implements ServicesProvider {
                         Wait.forListeningPort().withStartupTimeout(TIMEOUT)
                 );
         if (Boolean.getBoolean("verbose")) {
-            this.stack.withLogConsumer("db_1", new org.testcontainers.containers.output.Slf4jLogConsumer(log));
+            result
+                    .withLogConsumer("db_1", new Slf4jLogConsumer(log))
+                    .withLogConsumer("backup_1", new Slf4jLogConsumer(log))
+            ;
         }
-        this.stack.start();
+        return result;
     }
 
     @Override
@@ -49,5 +57,33 @@ public class ServicesContainers implements ServicesProvider {
     @Override
     public Integer getDbPort() {
         return this.stack.getServicePort("db_1", 5432);
+    }
+
+    @Override
+    public boolean isOnline() {
+        return this.stack != null;
+    }
+
+    private void startCommon(boolean recovery) {
+        this.stack = createStack(recovery);
+        this.stack.start();
+    }
+
+    @Override
+    public void start() {
+        startCommon(false);
+    }
+
+    @Override
+    public void startRecovery() {
+        startCommon(true);
+    }
+
+    @Override
+    public void stop() {
+        if (this.stack != null) {
+            this.stack.stop();
+            this.stack = null;
+        }
     }
 }

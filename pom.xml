@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <properties>
+        <node.version>10.15.0</node.version>
         <openjdk.version>8-jre</openjdk.version>
         <dockerize_version>0.6.1</dockerize_version>
         <postgres.driver.version>42.2.4</postgres.driver.version>
@@ -18,13 +19,15 @@
         <OPENJKD_VERSION>${openjdk.version}</OPENJKD_VERSION>
         <POSTGRES_VERSION>11.1</POSTGRES_VERSION>
         <DOCKERIZE_VERSION>v${dockerize_version}</DOCKERIZE_VERSION>
+        <NODE_VERSION>${node.version}</NODE_VERSION>
         <lombok.version>1.18.0</lombok.version>
     </properties>
     <modules>
         <module>postgres-docker</module>
         <module>ft</module>
-        <module>ft-docker</module>
         <module>thirdparty-docker</module>
+        <module>backup</module>
+        <module>backup-docker</module>
     </modules>
     <repositories>
         <repository>
@@ -98,6 +101,14 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.0.2</version>
                 </plugin>
@@ -105,6 +116,10 @@
                     <groupId>io.fabric8</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
                     <version>0.27.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
                 </plugin>
             </plugins>
         </pluginManagement>

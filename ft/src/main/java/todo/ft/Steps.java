@@ -1,12 +1,14 @@
 package todo.ft;
 
 import cucumber.api.java8.En;
+import cucumber.api.java8.StepdefBody;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import lombok.val;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,6 +28,9 @@ public class Steps implements En {
     @SuppressWarnings("unchecked")
     public Steps() {
         Given("the system is live", () -> {
+            if (!ServiceGetter.SERVICES.isOnline()) {
+                ServiceGetter.SERVICES.start();
+            }
             try (val connection = getConnection()) {
                 val statement = connection.createStatement();
                 val resultSet = statement.executeQuery("SELECT 1");
@@ -69,6 +74,18 @@ public class Steps implements En {
             }
         });
 
+        Given("I stop the services", ServiceGetter.SERVICES::stop);
 
+        Given("I start the services on recovery mode", ServiceGetter.SERVICES::startRecovery);
+
+        Given("I wait (\\d+) seconds", (StepdefBody.A1<Integer>) TimeUnit.SECONDS::sleep);
+
+        Given("I execute the '(.+)' query", (String string) -> {
+            try (val connection = getConnection()) {
+                val statement = connection.createStatement();
+                statement.execute(string);
+                connection.commit();
+            }
+        });
     }
 }

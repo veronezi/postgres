@@ -7,18 +7,21 @@
         <artifactId>sample-postgres</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>ft-docker</artifactId>
+    <artifactId>backup-docker</artifactId>
     <packaging>pom</packaging>
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ft</artifactId>
+            <artifactId>backup</artifactId>
+            <type>zip</type>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>thirdparty-docker</artifactId>
             <version>${project.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <build>
@@ -51,25 +54,16 @@
                         <id>copy-docker-deps</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy</goal>
+                            <goal>unpack</goal>
                         </goals>
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
-                                    <artifactId>ft</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <outputDirectory>${project.build.directory}/docker-build/ft</outputDirectory>
-                                    <destFileName>ft.jar</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>ft</artifactId>
-                                    <version>${project.version}</version>
+                                    <artifactId>backup</artifactId>
                                     <type>zip</type>
-                                    <outputDirectory>${project.build.directory}/docker-build/ft</outputDirectory>
-                                    <destFileName>lib.zip</destFileName>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>${project.build.directory}/docker-build/backup</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                             <overWriteReleases>false</overWriteReleases>
@@ -92,12 +86,12 @@
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <name>veronezi/postgres-ft</name>
+                                    <name>veronezi/postgres-backup</name>
                                     <build>
                                         <tags>
                                             <tag>${project.version}</tag>
                                         </tags>
-                                        <dockerFileDir>${project.build.directory}/docker-build/ft</dockerFileDir>
+                                        <dockerFileDir>${project.build.directory}/docker-build/backup</dockerFileDir>
                                     </build>
                                 </image>
                             </images>

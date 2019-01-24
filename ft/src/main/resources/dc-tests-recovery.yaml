@@ -18,6 +18,7 @@ services:
     environment:
       - WAIT_FOR=backup:3000
       - DEBUG=false
+      - RESTORE_MODE=true
       - POSTGRES_DB=todo
       - POSTGRES_USER=todo_user
       - POSTGRES_PASSWORD=todo_pass

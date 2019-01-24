@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+
+  backup:
+    image: veronezi/postgres-backup
+    ports:
+      - "3000"
+
+  db:
+    image: veronezi/sample-postgres
+    ports:
+      - "5432"
+    environment:
+      - WAIT_FOR=backup:3000
+      - RESTORE_MODE=${RESTORE_MODE:-false}
+      - DEBUG=false
+      - POSTGRES_DB=todo
+      - POSTGRES_USER=todo_user
+      - POSTGRES_PASSWORD=todo_pass
+    volumes:
+      - data-volume:/var/lib/postgresql/data
+
+volumes:
+  data-volume:
+
