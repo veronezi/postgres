@@ -11,8 +11,21 @@
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <properties>
-        <POSTGRES_VERSION>10.4</POSTGRES_VERSION>
+        <openjdk.version>8-jre</openjdk.version>
+        <dockerize_version>0.6.1</dockerize_version>
+        <postgres.driver.version>42.2.4</postgres.driver.version>
+        <VERSION>${project.version}</VERSION>
+        <OPENJKD_VERSION>${openjdk.version}</OPENJKD_VERSION>
+        <POSTGRES_VERSION>11.1</POSTGRES_VERSION>
+        <DOCKERIZE_VERSION>v${dockerize_version}</DOCKERIZE_VERSION>
+        <lombok.version>1.18.0</lombok.version>
     </properties>
+    <modules>
+        <module>postgres-docker</module>
+        <module>ft</module>
+        <module>ft-docker</module>
+        <module>thirdparty-docker</module>
+    </modules>
     <repositories>
         <repository>
             <snapshots>
@@ -22,6 +35,56 @@
             <url>https://dl.bintray.com/tveronezi/public</url>
         </repository>
     </repositories>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgres.driver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.12</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers</artifactId>
+                <version>1.8.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>1.7.25</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.6</version>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-java8</artifactId>
+                <version>3.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-junit</artifactId>
+                <version>3.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.11.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <pluginRepositories>
         <pluginRepository>
             <snapshots>
@@ -32,56 +95,19 @@
         </pluginRepository>
     </pluginRepositories>
     <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.2</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/docker-build</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}/src/main/docker</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.27.2</version>
-                <executions>
-                    <execution>
-                        <id>build</id>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <verbose>true</verbose>
-                            <images>
-                                <image>
-                                    <name>veronezi/sample-postgres</name>
-                                    <build>
-                                        <filter>false</filter>
-                                        <dockerFileDir>${project.build.directory}/docker-build/postgres</dockerFileDir>
-                                    </build>
-                                </image>
-                            </images>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.27.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>
 

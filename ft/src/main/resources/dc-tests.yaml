@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  db:
+    image: veronezi/sample-postgres
+    ports:
+    - "5432"
+    environment:
+    - DEBUG=false
+    - POSTGRES_DB=todo
+    - POSTGRES_USER=todo_user
+    - POSTGRES_PASSWORD=todo_pass
