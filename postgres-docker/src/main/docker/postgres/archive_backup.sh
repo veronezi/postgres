@@ -1,4 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "file to archive -> %p [%f]"
+FULL_PATH=$1
+FILE_NAME=$2
+
+echo "file to archive -> $FULL_PATH [$FILE_NAME]"

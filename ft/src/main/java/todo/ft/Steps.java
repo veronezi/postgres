@@ -15,10 +15,12 @@ public class Steps implements En {
 
     @SneakyThrows
     private Connection getConnection() {
-        return DriverManager.getConnection("jdbc:postgresql://"
+        val conn = DriverManager.getConnection("jdbc:postgresql://"
                         + ServiceGetter.SERVICES.getDbHost() + ":"
                         + ServiceGetter.SERVICES.getDbPort() + "/todo",
                 "todo_user", "todo_pass");
+        conn.setAutoCommit(false);
+        return conn;
     }
 
     @SuppressWarnings("unchecked")
@@ -37,6 +39,7 @@ public class Steps implements En {
                 val stat = connection.createStatement();
                 for (int i = 0; i < times; i++) {
                     stat.executeUpdate(String.format(sqlTemplate, i));
+                    connection.commit();
                 }
             }
         });
@@ -45,6 +48,7 @@ public class Steps implements En {
             try (val connection = getConnection()) {
                 val statement = connection.createStatement();
                 statement.executeUpdate("DROP TABLE IF EXISTS " + string);
+                connection.commit();
             }
         });
 
@@ -52,6 +56,7 @@ public class Steps implements En {
             try (val connection = getConnection()) {
                 val statement = connection.createStatement();
                 statement.executeUpdate(string);
+                connection.commit();
             }
         });
 
