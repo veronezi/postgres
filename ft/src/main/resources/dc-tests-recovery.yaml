@@ -7,16 +7,11 @@ services:
     ports:
       - "5432"
     environment:
+      - RESTORE_BASE_BACKUP=base.tar
       - DEBUG=false
       - POSTGRES_DB=todo
       - POSTGRES_USER=todo_user
       - POSTGRES_PASSWORD=todo_pass
-    healthcheck:
-      test: ["CMD", "bash", "/opt/create_base_backup.sh"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 2s
     volumes:
       - type: bind
         source: ${TMP}/volumes/backup

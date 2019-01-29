@@ -4,4 +4,5 @@ set -e
 FULL_PATH=$1
 FILE_NAME=$2
 
-echo "file to archive -> $FULL_PATH [$FILE_NAME]"
+echo "archiving $(pwd)/$FULL_PATH with user $(whoami)"
+cp $(pwd)/$FULL_PATH /opt/backup/wal/$FILE_NAME

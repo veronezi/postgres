@@ -10,12 +10,6 @@ class ServiceGetter {
 
     static {
         val loaded = ServiceLoader.load(ServicesProvider.class).iterator();
-        var impl = loaded.next();
-        if (Boolean.getBoolean("external_services")) {
-            while (!Services.class.equals(impl.getClass())) {
-                impl = loaded.next();
-            }
-        }
-        SERVICES = impl;
+        SERVICES = loaded.next();
     }
 }
