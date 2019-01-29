@@ -8,6 +8,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>ft</artifactId>
+    <properties>
+        <TMP>${project.build.directory}</TMP>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -78,10 +81,10 @@
                         <phase>generate-test-resources</phase>
                         <configuration>
                             <target>
-                                <mkdir dir="${project.build.directory}/volumes/backup_uploaded"/>
-                                <mkdir dir="${project.build.directory}/volumes/backup_uploads"/>
-                                <mkdir dir="${project.build.directory}/volumes/backup_basebackup"/>
-                                <mkdir dir="${project.build.directory}/volumes/db_data"/>
+                                <mkdir dir="${TMP}/volumes/backup_uploaded"/>
+                                <mkdir dir="${TMP}/volumes/backup_uploads"/>
+                                <mkdir dir="${TMP}/volumes/backup_basebackup"/>
+                                <mkdir dir="${TMP}/volumes/db_data"/>
                             </target>
                         </configuration>
                         <goals>
