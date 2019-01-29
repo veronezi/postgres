@@ -15,6 +15,5 @@ function deploy_docker_image () {
 }
 
 deploy_docker_image veronezi/sample-postgres $MY_VERSION $TRAVIS_BUILD_NUMBER
-deploy_docker_image veronezi/postgres-backup $MY_VERSION $TRAVIS_BUILD_NUMBER
 
 echo "binaries uploaded"
