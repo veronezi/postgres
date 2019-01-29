@@ -1,10 +1,6 @@
 ARG POSTGRES_VERSION
-ARG VERSION
 
-FROM dockerize:${VERSION} AS dockerz
 FROM postgres:${POSTGRES_VERSION}
-
-COPY --from=dockerz /usr/local/bin/dockerize /usr/local/bin/
 
 COPY postgres.conf /etc/postgresql/
 COPY restore.conf /opt
