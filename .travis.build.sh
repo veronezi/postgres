@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-mvn --settings /tmp/.travis.settings.xml install
+mvn --settings /tmp/.travis.settings.xml install -Dverbose=true
