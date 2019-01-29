@@ -24,13 +24,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>backup-docker</artifactId>
-            <version>${project.version}</version>
-            <type>pom</type>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -81,9 +74,7 @@
                         <phase>generate-test-resources</phase>
                         <configuration>
                             <target>
-                                <mkdir dir="${TMP}/volumes/backup_uploaded"/>
-                                <mkdir dir="${TMP}/volumes/backup_uploads"/>
-                                <mkdir dir="${TMP}/volumes/backup_basebackup"/>
+                                <mkdir dir="${TMP}/volumes/backup"/>
                                 <mkdir dir="${TMP}/volumes/db_data"/>
                             </target>
                         </configuration>
@@ -126,8 +117,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables>
-                        <headless>${headless}</headless>
                         <verbose>${verbose}</verbose>
+                        <backupDir>${TMP}/volumes/backup</backupDir>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

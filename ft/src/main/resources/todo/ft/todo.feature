@@ -11,7 +11,7 @@ Feature: [DB] Backup and recovery
 
   Scenario: I switch wal files and wait for the first backup to be triggered
     Given I execute the 'SELECT pg_switch_wal();' query
-    And I wait 60 seconds
+    And I wait for the first base backup to be ready
 
   Scenario: I mess up with the database then I restore it
     Given I execute the 'DELETE FROM names;' update

@@ -2,25 +2,22 @@ version: '3.7'
 
 services:
 
-  backup:
-    image: veronezi/postgres-backup
-    ports:
-      - "3000"
-
   db:
     image: veronezi/sample-postgres
     ports:
       - "5432"
     environment:
-      - WAIT_FOR=backup:3000
-      - RESTORE_MODE=${RESTORE_MODE:-false}
+      - RESTORE_BASE_BACKUP=${RESTORE_BASE_BACKUP:-}
       - DEBUG=false
       - POSTGRES_DB=todo
       - POSTGRES_USER=todo_user
       - POSTGRES_PASSWORD=todo_pass
+    healthcheck:
+      test: ["CMD", "bash", "/opt/create_base_backup.sh"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 20s
     volumes:
-      - data-volume:/var/lib/postgresql/data
-
-volumes:
-  data-volume:
-
+      - ./ft/target/volumes/backup:/opt/backup
+      - ./ft/target/volumes/db_data:/var/lib/postgresql

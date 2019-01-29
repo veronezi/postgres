@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-echo "[postgres] creating base backup..."
-echo "[postgres] ... creating the backup file..."
-pg_basebackup -U $POSTGRES_USER -Ft -X none -D /opt/basebackup
-echo "[postgres] ... uploading the backup file..."
-curl -s -f -F upload=@/opt/basebackup/base.tar $BACKUP_URL/basebackup
+echo "[postgres] creating base backup with user $(whoami)..."
+mv /opt/backup/base/base.tar /opt/backup/base/base.tar.old.$(date +%s) > /dev/null | true
+pg_basebackup -U $POSTGRES_USER -Ft -X none -D /opt/backup/base

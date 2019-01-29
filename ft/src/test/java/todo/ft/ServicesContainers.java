@@ -1,7 +1,8 @@
 package todo.ft;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
+import lombok.var;
 import org.apache.commons.io.FileUtils;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
@@ -33,7 +34,7 @@ public class ServicesContainers implements ServicesProvider {
     }
 
     private DockerComposeContainer createStack(boolean recovery) {
-        val result = new DockerComposeContainer(recovery? DC_FILE_RECOVERY : DC_FILE)
+        var result = new DockerComposeContainer(recovery ? DC_FILE_RECOVERY : DC_FILE)
                 .withPull(false)
                 .withExposedService(
                         "db_1",
@@ -41,7 +42,7 @@ public class ServicesContainers implements ServicesProvider {
                         Wait.forListeningPort().withStartupTimeout(TIMEOUT)
                 );
         if (Boolean.getBoolean("verbose")) {
-            result
+            result = result
                     .withLogConsumer("db_1", new Slf4jLogConsumer(log))
                     .withLogConsumer("backup_1", new Slf4jLogConsumer(log))
             ;
