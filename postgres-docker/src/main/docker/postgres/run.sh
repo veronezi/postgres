@@ -1,14 +1,6 @@
 #!/bin/bash
 set -e
 
-IFS=', ' read -r -a array <<< "$WAIT_FOR"
-for element in "${array[@]}"
-do
-    /usr/local/bin/dockerize -wait tcp://${element/@/:} -wait-retry-interval 5s -timeout 240s
-done
-
-echo "[postgres] All dependencies are online. Starting up this service now. [$(whoami)]"
-
 if [[ -z "$RESTORE_BASE_BACKUP" ]]
 then
     echo "[postgres] ...regular startup."

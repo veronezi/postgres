@@ -12,18 +12,15 @@
     <version>0.0.1-SNAPSHOT</version>
     <properties>
         <openjdk.version>8-jre</openjdk.version>
-        <dockerize_version>0.6.1</dockerize_version>
         <postgres.driver.version>42.2.4</postgres.driver.version>
         <VERSION>${project.version}</VERSION>
         <OPENJKD_VERSION>${openjdk.version}</OPENJKD_VERSION>
         <POSTGRES_VERSION>11.1</POSTGRES_VERSION>
-        <DOCKERIZE_VERSION>v${dockerize_version}</DOCKERIZE_VERSION>
         <lombok.version>1.18.0</lombok.version>
     </properties>
     <modules>
         <module>postgres-docker</module>
         <module>ft</module>
-        <module>thirdparty-docker</module>
     </modules>
     <repositories>
         <repository>
