@@ -2,5 +2,7 @@
 set -e
 
 echo "[postgres] creating base backup with user $(whoami)..."
-mv /opt/backup/base/base.tar /opt/backup/base/base.tar.old.$(date +%s) > /dev/null | true
-pg_basebackup -U $POSTGRES_USER -Ft -X none -D /opt/backup/base
+rm -Rf /tmp/base
+pg_basebackup -U $POSTGRES_USER -Ft -X none -D /tmp/base
+mc cp /tmp/base/base.tar $MINIOSRV_NAME/$UPLOAD_BASEBACKUP_PATH/base_$(date +%s)
+mc cp /tmp/base/base.tar $MINIOSRV_NAME/$UPLOAD_BASEBACKUP_PATH/base

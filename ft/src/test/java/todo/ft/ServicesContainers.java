@@ -40,14 +40,29 @@ public class ServicesContainers implements ServicesProvider {
                         "db_1",
                         5432,
                         Wait.forListeningPort().withStartupTimeout(TIMEOUT)
+                )
+                .withExposedService(
+                        "minio_1",
+                        9000,
+                        Wait.forListeningPort().withStartupTimeout(TIMEOUT)
                 );
         if (Boolean.getBoolean("verbose")) {
             result = result
                     .withLogConsumer("db_1", new Slf4jLogConsumer(log))
-                    .withLogConsumer("backup_1", new Slf4jLogConsumer(log))
+                    .withLogConsumer("minio_1", new Slf4jLogConsumer(log))
             ;
         }
         return result;
+    }
+
+    @Override
+    public String getMinioHost() {
+        return this.stack.getServiceHost("minio_1", 9000);
+    }
+
+    @Override
+    public Integer getMinioPort() {
+        return this.stack.getServicePort("minio_1", 9000);
     }
 
     @Override

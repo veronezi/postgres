@@ -4,5 +4,6 @@ set -e
 FULL_PATH=$1
 FILE_NAME=$2
 
-echo "archiving $(pwd)/$FULL_PATH with user $(whoami)"
-cp $(pwd)/$FULL_PATH /opt/backup/wal/$FILE_NAME
+echo "[postgres] archiving $(pwd)/$FULL_PATH with user $(whoami)"
+mc cp $(pwd)/$FULL_PATH $MINIOSRV_NAME/$UPLOAD_WAL_PATH/$FILE_NAME
+echo "[postgres] archive complete"

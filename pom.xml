@@ -7,20 +7,28 @@
         <artifactId>parent</artifactId>
         <version>0.0.1-b7</version>
     </parent>
+    <groupId>com.veronezi.sample-postgres</groupId>
     <artifactId>sample-postgres</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <properties>
         <openjdk.version>8-jre</openjdk.version>
         <postgres.driver.version>42.2.4</postgres.driver.version>
+        <dockerize_version>0.6.1</dockerize_version>
+        <postgres.version>11.1</postgres.version>
+        <minio.version>RELEASE.2019-02-12T21-58-47Z</minio.version>
+        <lombok.version>1.18.0</lombok.version>
+
         <VERSION>${project.version}</VERSION>
         <OPENJKD_VERSION>${openjdk.version}</OPENJKD_VERSION>
-        <POSTGRES_VERSION>11.1</POSTGRES_VERSION>
-        <lombok.version>1.18.0</lombok.version>
+        <DOCKERIZE_VERSION>v${dockerize_version}</DOCKERIZE_VERSION>
+        <POSTGRES_VERSION>${postgres.version}</POSTGRES_VERSION>
+        <MINIO_VERSION>${minio.version}</MINIO_VERSION>
     </properties>
     <modules>
         <module>postgres-docker</module>
         <module>ft</module>
+        <module>thirdparty-docker</module>
     </modules>
     <repositories>
         <repository>
@@ -33,6 +41,11 @@
     </repositories>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>6.0.1</version>
+            </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>

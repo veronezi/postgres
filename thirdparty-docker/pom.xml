@@ -7,24 +7,9 @@
         <artifactId>sample-postgres</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>postgres-docker</artifactId>
+    <artifactId>thirdparty-docker</artifactId>
     <packaging>pom</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>thirdparty-docker</artifactId>
-            <version>${project.version}</version>
-            <type>pom</type>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -40,7 +25,7 @@
                             <resources>
                                 <resource>
                                     <directory>${project.basedir}/src/main/docker</directory>
-                                    <filtering>true</filtering>
+                                    <filtering>false</filtering>
                                 </resource>
                             </resources>
                         </configuration>
@@ -61,10 +46,21 @@
                             <verbose>true</verbose>
                             <images>
                                 <image>
-                                    <name>veronezi/sample-postgres</name>
+                                    <name>dockerize</name>
                                     <build>
-                                        <filter>false</filter>
-                                        <dockerFileDir>${project.build.directory}/docker-build/postgres</dockerFileDir>
+                                        <tags>
+                                            <tag>${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}/docker-build/dockerize</dockerFileDir>
+                                    </build>
+                                </image>
+                                <image>
+                                    <name>veronezi/sample-minio</name>
+                                    <build>
+                                        <tags>
+                                            <tag>${project.version}</tag>
+                                        </tags>
+                                        <dockerFileDir>${project.build.directory}/docker-build/minio</dockerFileDir>
                                     </build>
                                 </image>
                             </images>

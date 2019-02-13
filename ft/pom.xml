@@ -3,7 +3,7 @@
          xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.veronezi</groupId>
+        <groupId>com.veronezi.sample-postgres</groupId>
         <artifactId>sample-postgres</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -15,6 +15,10 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -74,8 +78,7 @@
                         <phase>generate-test-resources</phase>
                         <configuration>
                             <target>
-                                <mkdir dir="${TMP}/volumes/backup"/>
-                                <mkdir dir="${TMP}/volumes/db_data"/>
+                                <mkdir dir="${TMP}/minio_data"/>
                             </target>
                         </configuration>
                         <goals>
