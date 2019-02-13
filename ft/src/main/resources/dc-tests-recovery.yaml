@@ -8,7 +8,7 @@ services:
       - "9000"
     volumes:
       - type: bind
-        source: /home/tveronezi/Documents/source/veronezi/postgres/ft/target/minio_data
+        source: ${TMP}/minio_data
         target: /opt/volume
 
   db:
