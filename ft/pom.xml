@@ -121,7 +121,6 @@
                 <configuration>
                     <systemPropertyVariables>
                         <verbose>${verbose}</verbose>
-                        <backupDir>${TMP}/volumes/backup</backupDir>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
