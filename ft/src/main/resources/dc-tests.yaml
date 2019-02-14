@@ -7,9 +7,7 @@ services:
     ports:
       - "9000"
     volumes:
-      - type: bind
-        source: ${TMP}/minio_data
-        target: /opt/volume
+      - minio_volume:/opt/volume
 
   db:
     image: veronezi/sample-postgres
@@ -30,3 +28,7 @@ services:
       timeout: 10s
       retries: 10
       start_period: 2s
+
+volumes:
+  minio_volume:
+    external: true

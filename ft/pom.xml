@@ -8,9 +8,6 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>ft</artifactId>
-    <properties>
-        <TMP>${project.build.directory}</TMP>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -78,7 +75,17 @@
                         <phase>generate-test-resources</phase>
                         <configuration>
                             <target>
-                                <mkdir dir="${TMP}/minio_data"/>
+                                <exec executable="docker">
+                                    <arg value="volume"/>
+                                    <arg value="remove"/>
+                                    <arg value="minio_volume"/>
+                                    <arg value="-f"/>
+                                </exec>
+                                <exec executable="docker">
+                                    <arg value="volume"/>
+                                    <arg value="create"/>
+                                    <arg value="minio_volume"/>
+                                </exec>
                             </target>
                         </configuration>
                         <goals>
