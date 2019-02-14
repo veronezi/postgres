@@ -1,11 +1,9 @@
 package todo.ft;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.apache.commons.io.FileUtils;
 import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.io.File;
@@ -40,14 +38,26 @@ public class ServicesContainers implements ServicesProvider {
                         "db_1",
                         5432,
                         Wait.forListeningPort().withStartupTimeout(TIMEOUT)
+                )
+                .withExposedService(
+                        "minio_1",
+                        9000,
+                        Wait.forListeningPort().withStartupTimeout(TIMEOUT)
                 );
         if (Boolean.getBoolean("verbose")) {
-            result = result
-                    .withLogConsumer("db_1", new Slf4jLogConsumer(log))
-                    .withLogConsumer("backup_1", new Slf4jLogConsumer(log))
-            ;
+            result = result.withTailChildContainers(true);
         }
         return result;
+    }
+
+    @Override
+    public String getMinioHost() {
+        return this.stack.getServiceHost("minio_1", 9000);
+    }
+
+    @Override
+    public Integer getMinioPort() {
+        return this.stack.getServicePort("minio_1", 9000);
     }
 
     @Override

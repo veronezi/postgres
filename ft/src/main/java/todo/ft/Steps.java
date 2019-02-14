@@ -1,14 +1,21 @@
 package todo.ft;
 
 import cucumber.api.java8.En;
+import io.minio.MinioClient;
+import io.minio.errors.*;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import lombok.val;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -101,9 +108,16 @@ public class Steps implements En {
         Given("I start the services on recovery mode", ServiceGetter.SERVICES::startRecovery);
 
         Given("I wait for the first base backup to be ready", () -> retry(() -> {
-            val base = Paths.get(System.getProperty("backupDir"), "base", "base.tar").toFile();
-            if (!base.exists()) {
-                throw new TestException(base.getAbsolutePath() + " not yet created");
+            try {
+                val client = new MinioClient(
+                        "http://" + ServiceGetter.SERVICES.getMinioHost() + ":" + ServiceGetter.SERVICES.getMinioPort(),
+                        "TESTINGACCESS123",
+                        "tesTingPass123"
+                );
+                client.getObject("basebackup", "base");
+            } catch (Exception e) {
+                log.log(Level.INFO, "base not yet created");
+                throw new TestException("base not yet created", e);
             }
         }));
 

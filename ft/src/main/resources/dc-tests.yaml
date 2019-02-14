@@ -2,25 +2,33 @@ version: '3.7'
 
 services:
 
+  minio:
+    image: veronezi/sample-minio
+    ports:
+      - "9000"
+    volumes:
+      - minio_volume:/opt/volume
+
   db:
     image: veronezi/sample-postgres
     ports:
       - "5432"
     environment:
+      - WAIT_FOR=minio:9000
+      - MINIO_URL=minio:9000
+      - MINIO_ACCESS_KEY=TESTINGACCESS123
+      - MINIO_SECRET_KEY=tesTingPass123
       - DEBUG=false
       - POSTGRES_DB=todo
       - POSTGRES_USER=todo_user
       - POSTGRES_PASSWORD=todo_pass
     healthcheck:
       test: ["CMD", "bash", "/opt/create_base_backup.sh"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 10
       start_period: 2s
-    volumes:
-      - type: bind
-        source: ${TMP}/volumes/backup
-        target: /opt/backup
-      - type: bind
-        source: ${TMP}/volumes/db_data
-        target: /var/lib/postgresql
+
+volumes:
+  minio_volume:
+    external: true
